@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		821507391E5746F000C75711 /* iCarousel.h in Headers */ = {isa = PBXBuildFile; fileRef = 821507371E5746F000C75711 /* iCarousel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8215073A1E5746F000C75711 /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 821507381E5746F000C75711 /* iCarousel.m */; };
+		C73646A02033350000C47732 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C736469F2033350000C47732 /* UIKit.framework */; };
+		C73646A42033355100C47732 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C73646A32033355100C47732 /* QuartzCore.framework */; };
+		C73646A62033357200C47732 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C73646A52033357200C47732 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +20,9 @@
 		821507371E5746F000C75711 /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		821507381E5746F000C75711 /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
 		821507421E57475B00C75711 /* iCarousel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = iCarousel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C736469F2033350000C47732 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C73646A32033355100C47732 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C73646A52033357200C47732 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -24,6 +30,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C73646A62033357200C47732 /* CoreGraphics.framework in Frameworks */,
+				C73646A42033355100C47732 /* QuartzCore.framework in Frameworks */,
+				C73646A02033350000C47732 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +51,7 @@
 			children = (
 				8215072D1E57468200C75711 /* iCarousel */,
 				8215072C1E57468200C75711 /* Products */,
+				C736469E2033350000C47732 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -70,6 +80,16 @@
 				8215072F1E57468200C75711 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C736469E2033350000C47732 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C73646A52033357200C47732 /* CoreGraphics.framework */,
+				C73646A32033355100C47732 /* QuartzCore.framework */,
+				C736469F2033350000C47732 /* UIKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,7 +229,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -260,7 +280,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
