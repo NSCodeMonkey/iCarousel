@@ -9,6 +9,13 @@
       name = "Examples">
       <Group
          location = "container:"
+         name = "PlayWrapper">
+         <FileRef
+            location = "group:/Users/dingtao/ioswork/3rd/iCarousel/PlayWarpper/PlayWrapper.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
          name = "Advanced iOS Demo">
          <FileRef
             location = "group:Examples/Advanced iOS Demo/iCarouselExample.xcodeproj">

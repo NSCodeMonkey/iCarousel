@@ -56,7 +56,7 @@
     [super viewDidLoad];
     
     //configure carousel
-    carousel.type = iCarouselTypeRotary;
+    carousel.type = iCarouselTypeLinear;
 }
 
 - (void)viewDidUnload
@@ -123,9 +123,9 @@
     switch (option)
     {
         case iCarouselOptionFadeMin:
-            return -0.2;
+            return -1;
         case iCarouselOptionFadeMax:
-            return 0.2;
+            return 1;
         case iCarouselOptionFadeRange:
             return 2.0;
         default:
