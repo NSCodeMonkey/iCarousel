@@ -7,6 +7,8 @@
 
 #import "OUPCarouselView.h"
 
+#import <iCarousel/iCarousel.h>
+
 @interface OUPCarouselView ()<iCarouselDataSource, iCarouselDelegate>
 {
     Class _itemClass;
