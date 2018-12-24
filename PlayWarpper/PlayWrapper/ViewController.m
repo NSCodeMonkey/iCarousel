@@ -26,14 +26,14 @@
     // Do any additional setup after loading the view, typically from a nib.
 
     _carousel = [[OUPCarouselView alloc] init];
-    _carousel.wrapEnabled = YES;
+    _carousel.infiniteScrollEnabled = YES;
     _carousel.spacing = 1.05;
     _carousel.isFeedbackEnabled = YES;
-    _carousel.autoscroll = 0.2;
+    _carousel.autoScroll = 0.2;
 
     _carousel.dataSource = self;
     _carousel.delegate = self;
-    [_carousel registerClass:UIImageView.class];
+    [_carousel registerItemViewClass:UIImageView.class];
     [self.view addSubview:_carousel];
     _carousel.translatesAutoresizingMaskIntoConstraints = NO;
     // Layout

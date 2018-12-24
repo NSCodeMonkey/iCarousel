@@ -25,7 +25,7 @@
         unsigned int shouldSelectItemAtIndex : 1;
         unsigned int didSelectItemAtIndex : 1;
         unsigned int itemTransformForOffset : 1;
-    } delegateRespondsTo;
+    } _delegateRespondsTo;
 }
 @property (nonatomic) UISelectionFeedbackGenerator* feedback;
 
@@ -68,7 +68,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
     _isFeedbackEnabled = NO;
     _bounces = YES;
     _scrollEnabled = YES;
-    _autoscroll = 1.0;
+    _autoScroll = 1.0;
     _numberOfVisibleItems = defaultNumberofVisibleItems;
     _spacing = defaultSpacing;
     _fadeMin = defaultFadeMin;
@@ -95,8 +95,11 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 #pragma mark - public
 
-- (void)registerClass:(nullable Class)itemClass
+- (void)registerItemViewClass:( Class)itemClass
 {
+    NSParameterAssert(itemClass != nil);
+    NSParameterAssert([itemClass isSubclassOfClass:[UIView class]]);
+
     _itemClass = itemClass;
 }
 
@@ -106,15 +109,17 @@ const CGFloat defaultFadeMinAlpha = 0.0;
     if (view == nil)
     {
         NSAssert(_itemClass != nil, @"need call registerClass:itemClass");
-        view = [_itemClass new];
+        view = [[_itemClass alloc] init];
 
-        CGSize size = [_dataSource carouselView:self sizeForItemAtIndex:index];
+        CGSize size = [_delegate carouselView:self sizeForItemAtIndex:index];
         view.bounds = CGRectMake(0, 0, size.width, size.height);
     }
+    
     if (_reusingView)
     {
         _reusingView = nil;
     }
+    
     return view;
 }
 
@@ -205,7 +210,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (void)carouselWillBeginScrollingAnimation:(iCarousel*)carousel
 {
-    if (delegateRespondsTo.carouselViewWillBeginScrollingAnimation)
+    if (_delegateRespondsTo.carouselViewWillBeginScrollingAnimation)
     {
         [_delegate carouselViewWillBeginScrollingAnimation:self];
     }
@@ -213,7 +218,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (void)carouselDidEndScrollingAnimation:(iCarousel*)carousel
 {
-    if (delegateRespondsTo.carouselViewDidEndScrollingAnimation)
+    if (_delegateRespondsTo.carouselViewDidEndScrollingAnimation)
     {
         [_delegate carouselViewDidEndScrollingAnimation:self];
     }
@@ -221,7 +226,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (void)carouselDidScroll:(iCarousel*)carousel
 {
-    if (delegateRespondsTo.carouselViewDidScroll)
+    if (_delegateRespondsTo.carouselViewDidScroll)
     {
         [_delegate carouselViewDidScroll:self];
     }
@@ -230,7 +235,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 - (void)carouselCurrentItemIndexDidChange:(iCarousel*)carousel
 {
     [self feedbackIfNeeded];
-    if (delegateRespondsTo.carouselViewCurrentItemIndexDidChange)
+    if (_delegateRespondsTo.carouselViewCurrentItemIndexDidChange)
     {
         [_delegate carouselViewCurrentItemIndexDidChange:self];
     }
@@ -239,7 +244,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 - (void)carouselWillBeginDragging:(iCarousel*)carousel
 {
     [self prepareFeedback];
-    if (delegateRespondsTo.carouselViewWillBeginDragging)
+    if (_delegateRespondsTo.carouselViewWillBeginDragging)
     {
         [_delegate carouselViewWillBeginDragging:self];
     }
@@ -247,7 +252,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (void)carouselDidEndDragging:(iCarousel*)carousel willDecelerate:(BOOL)decelerate
 {
-    if (delegateRespondsTo.carouselViewDidEndDragging)
+    if (_delegateRespondsTo.carouselViewDidEndDragging)
     {
         [_delegate carouselViewDidEndDragging:self willDecelerate:decelerate];
     }
@@ -255,7 +260,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (void)carouselWillBeginDecelerating:(iCarousel*)carousel
 {
-    if (delegateRespondsTo.carouselViewWillBeginDecelerating)
+    if (_delegateRespondsTo.carouselViewWillBeginDecelerating)
     {
         [_delegate carouselViewWillBeginDecelerating:self];
     }
@@ -263,7 +268,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (void)carouselDidEndDecelerating:(iCarousel*)carousel
 {
-    if (delegateRespondsTo.carouselViewDidEndDecelerating)
+    if (_delegateRespondsTo.carouselViewDidEndDecelerating)
     {
         [_delegate carouselViewDidEndDecelerating:self];
     }
@@ -271,7 +276,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (BOOL)carousel:(iCarousel*)carousel shouldSelectItemAtIndex:(NSInteger)index
 {
-    if (delegateRespondsTo.shouldSelectItemAtIndex)
+    if (_delegateRespondsTo.shouldSelectItemAtIndex)
     {
         return [_delegate carouselView:self shouldSelectItemAtIndex:index];
     }
@@ -280,7 +285,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (void)carousel:(iCarousel*)carousel didSelectItemAtIndex:(NSInteger)index
 {
-    if (delegateRespondsTo.didSelectItemAtIndex)
+    if (_delegateRespondsTo.didSelectItemAtIndex)
     {
         [_delegate carouselView:self didSelectItemAtIndex:index];
     }
@@ -288,7 +293,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 
 - (CATransform3D)carousel:(iCarousel*)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform
 {
-    if (delegateRespondsTo.itemTransformForOffset)
+    if (_delegateRespondsTo.itemTransformForOffset)
     {
         return [_delegate carouselView:self itemTransformForOffset:offset baseTransform:transform];
     }
@@ -301,7 +306,7 @@ const CGFloat defaultFadeMinAlpha = 0.0;
     {
         case iCarouselOptionWrap:
         {
-            return _wrapEnabled;
+            return _infiniteScrollEnabled;
         }
         case iCarouselOptionSpacing:
         {
@@ -354,17 +359,17 @@ const CGFloat defaultFadeMinAlpha = 0.0;
 - (void)setDelegate:(id<OUPCarouselViewDelegate>)delegate
 {
     _delegate = delegate;
-    delegateRespondsTo.carouselViewWillBeginScrollingAnimation = [delegate respondsToSelector:@selector(carouselViewWillBeginScrollingAnimation:)];
-    delegateRespondsTo.carouselViewDidEndScrollingAnimation = [delegate respondsToSelector:@selector(carouselViewDidEndScrollingAnimation:)];
-    delegateRespondsTo.carouselViewDidScroll = [delegate respondsToSelector:@selector(carouselViewDidScroll:)];
-    delegateRespondsTo.carouselViewCurrentItemIndexDidChange = [delegate respondsToSelector:@selector(carouselViewCurrentItemIndexDidChange:)];
-    delegateRespondsTo.carouselViewWillBeginDragging = [delegate respondsToSelector:@selector(carouselViewWillBeginDragging:)];
-    delegateRespondsTo.carouselViewDidEndDragging = [delegate respondsToSelector:@selector(carouselViewDidEndDragging:willDecelerate:)];
-    delegateRespondsTo.carouselViewWillBeginDecelerating = [delegate respondsToSelector:@selector(carouselViewWillBeginDecelerating:)];
-    delegateRespondsTo.carouselViewDidEndDecelerating = [delegate respondsToSelector:@selector(carouselViewDidEndDecelerating:)];
-    delegateRespondsTo.shouldSelectItemAtIndex = [delegate respondsToSelector:@selector(carouselView:shouldSelectItemAtIndex:)];
-    delegateRespondsTo.didSelectItemAtIndex = [delegate respondsToSelector:@selector(carouselView:didSelectItemAtIndex:)];
-    delegateRespondsTo.itemTransformForOffset = [delegate respondsToSelector:@selector(carouselView:itemTransformForOffset:baseTransform:)];
+    _delegateRespondsTo.carouselViewWillBeginScrollingAnimation = [delegate respondsToSelector:@selector(carouselViewWillBeginScrollingAnimation:)];
+    _delegateRespondsTo.carouselViewDidEndScrollingAnimation = [delegate respondsToSelector:@selector(carouselViewDidEndScrollingAnimation:)];
+    _delegateRespondsTo.carouselViewDidScroll = [delegate respondsToSelector:@selector(carouselViewDidScroll:)];
+    _delegateRespondsTo.carouselViewCurrentItemIndexDidChange = [delegate respondsToSelector:@selector(carouselViewCurrentItemIndexDidChange:)];
+    _delegateRespondsTo.carouselViewWillBeginDragging = [delegate respondsToSelector:@selector(carouselViewWillBeginDragging:)];
+    _delegateRespondsTo.carouselViewDidEndDragging = [delegate respondsToSelector:@selector(carouselViewDidEndDragging:willDecelerate:)];
+    _delegateRespondsTo.carouselViewWillBeginDecelerating = [delegate respondsToSelector:@selector(carouselViewWillBeginDecelerating:)];
+    _delegateRespondsTo.carouselViewDidEndDecelerating = [delegate respondsToSelector:@selector(carouselViewDidEndDecelerating:)];
+    _delegateRespondsTo.shouldSelectItemAtIndex = [delegate respondsToSelector:@selector(carouselView:shouldSelectItemAtIndex:)];
+    _delegateRespondsTo.didSelectItemAtIndex = [delegate respondsToSelector:@selector(carouselView:didSelectItemAtIndex:)];
+    _delegateRespondsTo.itemTransformForOffset = [delegate respondsToSelector:@selector(carouselView:itemTransformForOffset:baseTransform:)];
     _iCarousel.delegate = self;
 }
 
@@ -386,10 +391,10 @@ const CGFloat defaultFadeMinAlpha = 0.0;
     _iCarousel.pagingEnabled = pagingEnabled;
 }
 
-- (void)setAutoscroll:(CGFloat)autoscroll
+- (void)setAutoScroll:(CGFloat)autoScroll
 {
-    _autoscroll = autoscroll;
-    _iCarousel.autoscroll = autoscroll;
+    _autoScroll = autoScroll;
+    _iCarousel.autoscroll = autoScroll;
 }
 
 - (void)setCurrentItemIndex:(NSInteger)currentItemIndex
